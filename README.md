@@ -26,6 +26,15 @@ Usage:
 The script has 2 parameters. The first one is the export file, like example.csv
 The filter_ip is optional and can be used to filter the dataset by all requests from this IP
 
+Example output:
+
+> Only processing requests from 192.168.1.54
+> Results:
+> Total Requests: 61
+> Hosts: {"mobilecrush.king.com"=>48, "graph.facebook.com"=>11, "scontent.fbru5-1.fna.fbcdn.net"=>1, "gsp-ssl.ls.apple.com"=>1}
+> Schemes: {"https"=>61}
+> Insecure Requests: []
+
 ### Process DNS Requests
 
 Related to the proxy setup, a custom local DNS server (like PiHole) was used.
@@ -42,5 +51,10 @@ Usage:
 The script has 2 parameters. The first one is the log file, like example.log
 The filter_ip is optional and can be used to filter the dataset by all requests from this IP
 
+Example output:
 
+> Only processing requests from 192.168.1.54
+> Results:
+> Total Query Requests: 17
+> Hosts: {"mobilecrush.king.com"=>7, "p.midasplayer.com"=>2, "www.google.com"=>2, "king-candycrush-prod.secure2.footprint.net"=>1, "commnat-main-gc.ess.apple.com"=>1, "commnat-cohort-gc.ess.apple.com"=>1, "bling2.midasplayer.com"=>1, "servicelayer.king.com"=>1, "king-contenido-prod.secure2.footprint.net"=>1}
 

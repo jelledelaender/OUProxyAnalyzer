@@ -15,6 +15,7 @@
 
 require 'csv'
 require 'uri'
+require 'date'
 
 ## Validating parameters
 arg_length = ARGV.length
@@ -44,6 +45,8 @@ hosts = Hash.new(0)
 schemes = Hash.new(0)
 insecure_requests = Array.new
 number_of_requests = 0
+date_first_test = false
+date_last_test = false
 
 # data = CSV.read("CancyCrush.csv")
 
@@ -89,6 +92,11 @@ CSV.foreach((file), headers: true, col_sep: ",") do |row|
     ## Processing entry
     number_of_requests += 1
 
+    date_last_test = DateTime.parse row["Request Start Time"]
+
+    date_first_test = date_last_test  if date_first_test == false
+
+
     url = row["URL"]
     
     uri = URI.parse(url)
@@ -105,7 +113,10 @@ hosts = hosts.sort_by {|_key, value| -value}.to_h
 
 puts "Results:"
 puts "Total Requests: #{number_of_requests}"
+puts "Proxy requests detected between  #{date_first_test} and #{date_last_test}"
+puts "Testing time (based on proxy): #{((date_last_test - date_first_test)*60*24).to_i} minutes"
 puts "Hosts: #{hosts}"
+puts "Hosts (as string): #{hosts.keys.join(",")}"
 puts "Schemes: #{schemes}" 
 puts "Insecure Requests: #{insecure_requests}" 
 

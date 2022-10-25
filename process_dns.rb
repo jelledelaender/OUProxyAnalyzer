@@ -68,3 +68,5 @@ hosts = hosts.sort_by {|_key, value| -value}.to_h ## Sorting on hosts with most 
 puts "Results:"
 puts "Total Query Requests: #{number_of_queries}"
 puts "Hosts: #{hosts}"
+puts "Hosts (as string): #{hosts.keys.join(",")}"
+

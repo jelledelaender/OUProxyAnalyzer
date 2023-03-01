@@ -41,32 +41,49 @@ end
 hosts = Hash.new(0)
 number_of_queries = 0
 
-File.open(file, "r").each_line do |line|
 
-  ## Query based on PiHole log format to get type of request, filter on queries with from
-  result = line.split(/^(.*) dnsmasq\[\d+\]\: (.+\[(.+)\]|.+) (.+) (from|is|to) (.+).*$/)
+begin
+  File.open(file, "r").each_line do |line|
 
-  ## Getting data of log line
-  date = result[1]
-  type = result[2]
+    ## Query based on PiHole log format to get type of request, filter on queries with from
+    result = line.split(/^(.*) dnsmasq\[\d+\]\: (.+\[(.+)\]|.+) (.+) (from|is|to) (.+).*$/)
 
-  if type == "query[A]" || type == "query[AAAA]" ## We are only interested in query logs
-    requester_ip = result[6]
+    ## Getting data of log line
+   date = result[1]
+   type = result[2]
 
-    ## Filter on IP of Requester
-    if ip == false || requester_ip == ip
-      number_of_queries += 1
-      host = result[4]
-      hosts[host] += 1
-    end
+    if type == "query[A]" || type == "query[AAAA]" ## We are only interested in query logs
+      requester_ip = result[6]
 
-  end ## Ignoring other log entries like replies, forwards
+      ## Filter on IP of Requester
+      if ip == false || requester_ip == ip
+       number_of_queries += 1
+        host = result[4]
+       hosts[host] += 1
+      end
+
+    end ## Ignoring other log entries like replies, forwards
+end
+
+rescue Exception => e
+  puts "Exception triggered while processing file '#{file}': #{e}"
+  exit
+end
+
+if hosts.length == 0
+  puts "No data found. Is the correct dnsmasq / PiHole file used as input?"
+  exit
 end
 
 hosts = hosts.sort_by {|_key, value| -value}.to_h ## Sorting on hosts with most requests
 
 puts "Results:"
 puts "Total Query Requests: #{number_of_queries}"
-puts "Hosts: #{hosts}"
-puts "Hosts (as string): #{hosts.keys.join(",")}"
+puts "Total Unique Hosts: #{hosts.length}"
+puts ""
+puts "Detected hosts:"
+hosts.each { |key, value| puts "#{key}: #{value} times" }
+puts "---"
+
+
 

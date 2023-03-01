@@ -48,9 +48,8 @@ number_of_requests = 0
 date_first_test = false
 date_last_test = false
 
-# data = CSV.read("CancyCrush.csv")
-
-CSV.foreach((file), headers: true, col_sep: ",") do |row|
+begin
+  CSV.foreach((file), headers: true, col_sep: ",") do |row|
     ## DataFields
     # URL
     # Status
@@ -105,7 +104,17 @@ CSV.foreach((file), headers: true, col_sep: ",") do |row|
     hosts[uri.host] += 1
 
     insecure_requests.append url if uri.scheme == "http"
-end 
+  end 
+
+rescue Exception => e
+  puts "Exception triggered while processing file '#{file}': #{e}"
+  exit
+end
+
+if hosts.length == 0
+  puts "No data found. Is the correct CSV file used as input? Does the file meet the requirements?"
+  exit
+end
 
 ## Sorting counters
 schemes = schemes.sort_by {|_key, value| -value}.to_h

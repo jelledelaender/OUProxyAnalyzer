@@ -2,7 +2,7 @@
 
 # process_requests.rb
 # 
-# Objective of process_rquests.rb is to analyze the CSV export of the proxy
+# Objective of process_requests.rb is to analyze the CSV export of the proxy
 # The end result is an overview of the requests
 # Which domains were requested, was HTTPS used
 # How many times was the less secure HTTP used, and showing those URLs
@@ -120,12 +120,18 @@ end
 schemes = schemes.sort_by {|_key, value| -value}.to_h
 hosts = hosts.sort_by {|_key, value| -value}.to_h
 
-puts "Results:"
-puts "Total Requests: #{number_of_requests}"
+puts "Processed Proxy requests file #{file}:"
+puts "Total Requests Intercepted: #{number_of_requests}"
 puts "Proxy requests detected between  #{date_first_test} and #{date_last_test}"
-puts "Testing time (based on proxy): #{((date_last_test - date_first_test)*60*24).to_i} minutes"
-puts "Hosts: #{hosts}"
-puts "Hosts (as string): #{hosts.keys.join(",")}"
+puts "Testing time (based on proxy data): #{((date_last_test - date_first_test)*60*24).to_i} minutes"
+puts "Total Unique Hosts: #{hosts.length}"
+puts ""
+puts "Detected hosts:"
+hosts.each { |key, value| puts " - #{key}: #{value} times" }
+
+puts ""
 puts "Schemes: #{schemes}" 
-puts "Insecure Requests: #{insecure_requests}" 
+puts "Insecure Requests: #{insecure_requests.length}" 
+insecure_requests.each { |value| puts " 🚨 #{value}" }
+
 

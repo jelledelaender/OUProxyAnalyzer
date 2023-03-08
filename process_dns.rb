@@ -77,13 +77,13 @@ end
 
 hosts = hosts.sort_by {|_key, value| -value}.to_h ## Sorting on hosts with most requests
 
-puts "Results:"
+puts "Processed DNS log file #{file}:"
 puts "Total Query Requests: #{number_of_queries}"
 puts "Total Unique Hosts: #{hosts.length}"
 puts ""
 puts "Detected hosts:"
-hosts.each { |key, value| puts "#{key}: #{value} times" }
-puts "---"
+hosts.each { |key, value| puts " - #{key}: #{value} times" }
+
 
 
 

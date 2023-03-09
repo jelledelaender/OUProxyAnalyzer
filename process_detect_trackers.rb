@@ -1,16 +1,15 @@
 #!/usr/bin/env ruby
 
-# process_requests.rb
+# process_detect_trackers.rb
 # 
-# Objective of process_rquests.rb is to analyze the CSV export of the proxy
-# The end result is an overview of the requests
-# Which domains were requested, was HTTPS used
-# How many times was the less secure HTTP used, and showing those URLs
+# Objective of process_detect_trackers.rb is to analyze the CSV export of the proxy
+# The end result is an overview of all detected trackers
 #
 # Via an optional parameter, an IP can be given to limit the results of this host
+#
 # 
 # Usage
-# ruby process_requests.rb <csv_file.csv> <optional: filter_ip>
+# ruby ruby process_detect_trackers.rb <csv_file.csv> <optional: filter_ip>
 # 
 
 require 'csv'
@@ -21,7 +20,7 @@ require 'date'
 arg_length = ARGV.length
 if arg_length < 1 || arg_length > 2
   puts "Incorrect usage."
-  puts "Usage: ruby process_requests.rb <csv_file.csv> <optional: filter_ip>"
+  puts "Usage: ruby process_detect_trackers.rb <csv_file.csv> <optional: filter_ip>"
   exit
 end
 
@@ -41,48 +40,20 @@ if ip
 end
 
 ## Initialising variables
-hosts = Hash.new(0)
-schemes = Hash.new(0)
-insecure_requests = Array.new
 number_of_requests = 0
-date_first_test = false
-date_last_test = false
+unknown_domains = Hash.new(0)
 
-begin
+trackers = [
+   {"name"=>"Google Analytics", "type"=>"Ads", "domains"=>["ssl.google-analytics.com"], "occurrences"=>0},
+   {"name"=>"Unity3D", "type"=>"Games", "domains"=>["config.uca.cloud.unity3d.com","cdp.cloud.unity3d.com"], "occurrences"=>0},
+   {"name"=>"App-Measurement", "type"=>"App Usage", "domains"=>["app-measurement.com"], "occurrences"=>0},
+   {"name"=>"DataDog", "type"=>"App Performance", "domains"=>["app-measurement.com"], "occurrences"=>0}
+]
+
+## TODO: Make more smart. Regex?
+
+#begin
   CSV.foreach((file), headers: true, col_sep: ",") do |row|
-    ## DataFields
-    # URL
-    # Status
-    # Response Code
-    # Protocol
-    # Method
-    # Content-Type
-    # Client Address
-    # Client Port
-    # Remote Address
-    # Remote Port
-    # Exception
-    # Request Start Time
-    # Request End Time
-    # Response Start Time
-    # Response End Time
-    # Duration (ms)
-    # DNS Duration (ms)
-    # Connect Duration (ms)
-    # SSL Duration (ms),Request Duration (ms)
-    # Response Duration (ms)
-    # Latency (ms)
-    # Speed (KB/s)
-    # Request Speed (KB/s)
-    # Response Speed (KB/s)
-    # Request Handshake Size (bytes)
-    # Request Header Size (bytes)
-    # Request Body Size (bytes)
-    # Response Handshake Size (bytes)
-    # Response Header Size (bytes)
-    # Response Body Size (bytes)
-    # Request Compression
-    # Response Compression
 
     if ip != false && row["Client Address"] != "/#{ip}" ## Skip entry if IP filter is active, and client-address is different
         next
@@ -91,47 +62,50 @@ begin
     ## Processing entry
     number_of_requests += 1
 
-    date_last_test = DateTime.parse row["Request Start Time"]
-
-    date_first_test = date_last_test  if date_first_test == false
-
 
     url = row["URL"]
-    
     uri = URI.parse(url)
-        
-    schemes[uri.scheme] += 1
-    hosts[uri.host] += 1
+    host = uri.host
 
-    insecure_requests.append url if uri.scheme == "http"
+    next if host.end_with? ".apple.com" ## Skipping hosts of Apple
+    next if host.end_with? ".icloud.com" ## Skipping hosts of Apple
+
+    match = false
+    trackers.each do |tracker|
+      if tracker["domains"].include? host
+        tracker["occurrences"] += 1
+        match = true
+        break ## Domain should be unique per tracker, optimising loop
+      end
+
+    end
+
+    unknown_domains[host] += 1 if match == false ## Tracking unique unknown domains
+
+
   end 
 
-rescue Exception => e
-  puts "Exception triggered while processing file '#{file}': #{e}"
-  exit
-end
+# rescue Exception => e
+#   puts "Exception triggered while processing file '#{file}': #{e}"
+#   exit
+# end
 
-if hosts.length == 0
+if  number_of_requests == 0
   puts "No data found. Is the correct CSV file used as input? Does the file meet the requirements?"
   exit
 end
 
-## Sorting counters
-schemes = schemes.sort_by {|_key, value| -value}.to_h
-hosts = hosts.sort_by {|_key, value| -value}.to_h
+  ## Sort unknown domains, based on occurrences
+  unknown_domains = unknown_domains.sort_by {|_key, value| -value}.to_h
+  trackers = trackers.sort_by { |tracker| [ tracker["type"], tracker["occurrences"], tracker["name"] ] }
 
-puts "Processed Proxy requests file #{file}:"
-puts "Total Requests Intercepted: #{number_of_requests}"
-puts "Proxy requests detected between  #{date_first_test} and #{date_last_test}"
-puts "Testing time (based on proxy data): #{((date_last_test - date_first_test)*60*24).to_i} minutes"
-puts "Total Unique Hosts: #{hosts.length}"
-puts ""
-puts "Detected hosts:"
-hosts.each { |key, value| puts " - #{key}: #{value} times" }
-
-puts ""
-puts "Schemes: #{schemes}" 
-puts "Insecure Requests: #{insecure_requests.length}" 
-insecure_requests.each { |value| puts " 🚨 #{value}" }
-
+  puts "Detected Trackers:"
+  trackers.each do
+    |tracker| puts " - #{tracker["type"]}: #{tracker["name"]}: #{tracker["occurrences"]} times" if tracker["occurrences"] > 0
+  end
+ 
+  puts ""
+  puts "Unknown Domains: #{unknown_domains.length}"
+  unknown_domains.each { |key, value| puts " - #{key}: #{value} times" }
+  puts ""
 

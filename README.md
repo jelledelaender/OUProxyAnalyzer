@@ -29,11 +29,52 @@ The filter_ip is optional and can be used to filter the dataset by all requests 
 Example output:
 
 > Only processing requests from 192.168.1.54
-> Results:
-> Total Requests: 61
-> Hosts: {"mobilecrush.king.com"=>48, "graph.facebook.com"=>11, "scontent.fbru5-1.fna.fbcdn.net"=>1, "gsp-ssl.ls.apple.com"=>1}
-> Schemes: {"https"=>61}
-> Insecure Requests: []
+> Total Requests Intercepted: 274
+> Proxy requests detected between  2022-11-13T15:12:24+00:00 and 2022-11-13T15:18:04+00:00
+> Testing time (based on proxy data): 5 minutes
+> Total Unique Hosts: 37
+> 
+> Detected hosts:
+>  - apptoogoodtogo.com: 86 times
+>  - gspe19-ssl.ls.apple.com: 64 times
+>  - images.tgtg.ninja: 25 times
+>  - toogoodtogo.be: 21 times
+>  - api2.amplitude.com: 16 times
+>  - fonts.gstatic.com: 9 times
+>  - sdk.fra-01.braze.eu: 8 times
+>  - skadsdkless.appsflyer.com: 4 times
+>  - policy.app.cookieinformation.com: 4 times
+>  - region1.app-measurement.com: 4 times
+>  - firebaseremoteconfig.googleapis.com: 3 times
+>  - token.safebrowsing.apple: 2 times
+>  - consent.app.cookieinformation.com: 2 times
+>  - gspe79-ssl.ls.apple.com: 2 times
+>  - gsp64-ssl.ls.apple.com: 2 times
+>  - configuration.ls.apple.com: 1 times
+>  - gsp-ssl.ls.apple.com: 1 times
+>  - www.googletagmanager.com: 1 times
+>  - sentry.io: 1 times
+>  - mkt-cms.toogoodtogo.com: 1 times
+>  - firebaselogging-pa.googleapis.com: 1 times
+>  - apptrailers-ssl.itunes.apple.com: 1 times
+>  - launches.appsflyer.com: 1 times
+>  - firebase-settings.crashlytics.com: 1 times
+>  - firebaseinstallations.googleapis.com: 1 times
+>  - firebasedynamiclinks.googleapis.com: 1 times
+>  - app-measurement.com: 1 times
+>  - cdn-settings.appsflyersdk.com: 1 times
+>  - skadsdk.appsflyer.com: 1 times
+>  - ca.iadsdk.apple.com: 1 times
+>  - conversions.appsflyer.com: 1 times
+>  - dynamic-config-api.appsflyer.com: 1 times
+>  - gcdsdk.appsflyer.com: 1 times
+>  - attr.appsflyer.com: 1 times
+>  - pancake.apple.com: 1 times
+>  - safebrowsing.googleapis.com: 1 times
+>  - gspe35-ssl.ls.apple.com: 1 times
+> 
+> Schemes: {"https"=>274}
+> Insecure Requests: 0
 
 ### Process DNS Requests
 
@@ -55,8 +96,49 @@ Example output:
 
 > Only processing requests from 192.168.1.54
 > Results:
-> Total Query Requests: 17
-> Hosts: {"mobilecrush.king.com"=>7, "p.midasplayer.com"=>2, "www.google.com"=>2, "king-candycrush-prod.secure2.footprint.net"=>1, "commnat-main-gc.ess.apple.com"=>1, "commnat-cohort-gc.ess.apple.com"=>1, "bling2.midasplayer.com"=>1, "servicelayer.king.com"=>1, "king-contenido-prod.secure2.footprint.net"=>1}
+> Total Query Requests: 98
+> Total Unique Hosts: 39
+> 
+> Detected hosts:
+>  - gateway.icloud.com: 6 times
+>  - apptoogoodtogo.com: 4 times
+>  - api2.amplitude.com: 4 times
+>  - sdk.fra-01.braze.eu: 4 times
+>  - region1.app-measurement.com: 4 times
+>  - firebaseremoteconfig.googleapis.com: 4 times
+>  - skadsdkless.appsflyer.com: 4 times
+>  - token.safebrowsing.apple: 4 times
+>  - gsp64-ssl.ls.apple.com: 4 times
+>  - app-measurement.com: 3 times
+>  - attr.appsflyer.com: 2 times
+>  - safebrowsing.googleapis.com: 2 times
+>  - configuration.ls.apple.com: 2 times
+>  - gsp-ssl.ls.apple.com: 2 times
+>  - gspe35-ssl.ls.apple.com: 2 times
+>  - gspe19-ssl.ls.apple.com: 2 times
+>  - images.tgtg.ninja: 2 times
+>  - toogoodtogo.be: 2 times
+>  - www.googletagmanager.com: 2 times
+>  - sentry.io: 2 times
+>  - policy.app.cookieinformation.com: 2 times
+>  - fonts.gstatic.com: 2 times
+>  - mkt-cms.toogoodtogo.com: 2 times
+>  - consent.app.cookieinformation.com: 2 times
+>  - c.apple.news: 2 times
+>  - gspe79-ssl.ls.apple.com: 2 times
+>  - firebaselogging-pa.googleapis.com: 2 times
+>  - launches.appsflyer.com: 2 times
+>  - bag.itunes.apple.com: 2 times
+>  - firebase-settings.crashlytics.com: 2 times
+>  - firebaseinstallations.googleapis.com: 2 times
+>  - firebasedynamiclinks.googleapis.com: 2 times
+>  - cdn-settings.appsflyersdk.com: 2 times
+>  - skadsdk.appsflyer.com: 2 times
+>  - ca.iadsdk.apple.com: 2 times
+>  - conversions.appsflyer.com: 2 times
+>  - gcdsdk.appsflyer.com: 2 times
+>  - dynamic-config-api.appsflyer.com: 2 times
+>  - pancake.apple.com: 1 times
 
 ### Listing trackers
 

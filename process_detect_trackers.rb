@@ -87,6 +87,7 @@ trackers = [
    {"name"=>"NewRelic", "type"=>"App Performance", "domains"=>["js-agent.newrelic.com"], "occurrences"=>0},
 ]
 
+## Support functions
 def host_contain_tracker(host, tracker)
   tracker["domains"].each do |domain|
     return true if host.end_with?(domain) ## Allowing more generic domains
@@ -105,6 +106,7 @@ def exclude_host host
   false
 end
 
+## Prcessing CSV file
 begin
   CSV.foreach((file), headers: true, col_sep: ",") do |row|
 
@@ -114,7 +116,6 @@ begin
 
     ## Processing entry
     number_of_requests += 1
-
 
     url = row["URL"]
     uri = URI.parse(url)
@@ -131,8 +132,6 @@ begin
     end
 
     unknown_domains[host] += 1 if match == false ## Tracking unique unknown domains
-
-
   end 
 
 rescue Exception => e
@@ -149,6 +148,7 @@ end
   unknown_domains = unknown_domains.sort_by {|_key, value| -value}.to_h
   trackers = trackers.sort_by { |tracker| [ tracker["type"], tracker["occurrences"], tracker["name"] ] }
 
+  ## Print results
   puts "Detected Trackers:"
   trackers.each do
     |tracker| puts " - #{tracker["type"]}: #{tracker["name"]}: #{tracker["occurrences"]} times" if tracker["occurrences"] > 0

@@ -48,6 +48,7 @@ number_of_requests = 0
 date_first_test = false
 date_last_test = false
 
+## Processing CSV file
 begin
   CSV.foreach((file), headers: true, col_sep: ",") do |row|
     ## DataFields
@@ -120,6 +121,7 @@ end
 schemes = schemes.sort_by {|_key, value| -value}.to_h
 hosts = hosts.sort_by {|_key, value| -value}.to_h
 
+## Printing results
 puts "Processed Proxy requests file #{file}:"
 puts "Total Requests Intercepted: #{number_of_requests}"
 puts "Proxy requests detected between  #{date_first_test} and #{date_last_test}"
@@ -133,5 +135,3 @@ puts ""
 puts "Schemes: #{schemes}" 
 puts "Insecure Requests: #{insecure_requests.length}" 
 insecure_requests.each { |value| puts " 🚨 #{value}" }
-
-

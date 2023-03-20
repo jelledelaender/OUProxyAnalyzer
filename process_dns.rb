@@ -10,7 +10,6 @@
 # ruby process_dns.rb <log_file> <optional: filter_ip>
 # 
 
-
 require 'csv'
 require 'uri'
 
@@ -41,7 +40,7 @@ end
 hosts = Hash.new(0)
 number_of_queries = 0
 
-
+## Processing DNS Log file
 begin
   File.open(file, "r").each_line do |line|
 
@@ -77,6 +76,7 @@ end
 
 hosts = hosts.sort_by {|_key, value| -value}.to_h ## Sorting on hosts with most requests
 
+## Printing results
 puts "Processed DNS log file #{file}:"
 puts "Total Query Requests: #{number_of_queries}"
 puts "Total Unique Hosts: #{hosts.length}"
